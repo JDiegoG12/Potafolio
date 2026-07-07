@@ -1,0 +1,93 @@
+{
+  "nav": {
+    "home": "Home",
+    "about": "About",
+    "projects": "Projects",
+    "contact": "Contact",
+    "worlds": "Choose your world",
+    "openMenu": "Open menu",
+    "closeMenu": "Close menu",
+    "primary": "Main navigation",
+    "skip": "Skip to content"
+  },
+  "lang": {
+    "label": "Change language"
+  },
+  "sound": {
+    "unmute": "Enable sound",
+    "mute": "Mute"
+  },
+  "themes": {
+    "active": "Active world",
+    "switchTo": "Travel to {{world}}",
+    "teyvat": { "tagline": "Open skies and elemental magic" },
+    "gym": { "tagline": "Iron, sweat and discipline" },
+    "cyber": { "tagline": "Neon, HUD and precision" }
+  },
+  "hero": {
+    "kicker": "AI Developer",
+    "name": "DIEGO GOMEZ",
+    "tagline": "Building the future, one prompt at a time.",
+    "cta": "View projects"
+  },
+  "sections": {
+    "about": "About me",
+    "projects": "Featured projects",
+    "chill": "Chill projects",
+    "contact": "Contact"
+  },
+  "about": {
+    "bioShort": "[BIO_CORTA]",
+    "bioLong": "[BIO_LARGA]",
+    "photoAlt": "Photo of Diego Gomez — {{world}} version"
+  },
+  "projects": {
+    "links": {
+      "demo": "Live demo",
+      "code": "Code",
+      "frontend": "Frontend",
+      "backend": "Backend",
+      "github": "GitHub"
+    },
+    "stack": "Stack",
+    "flagship": "Flagship project",
+    "kob": {
+      "desc": "Jewelry e-commerce platform with catalog and admin dashboard."
+    },
+    "barberia": {
+      "desc": "Angular frontend for booking and managing a barbershop."
+    },
+    "aimo": {
+      "desc": "AI conversational assistant for emotional support of university students.",
+      "note": "Initial support — not a substitute for professional help.",
+      "bubbleUser": "Hey, today was a rough day…",
+      "bubbleBot": "I'm here to listen. Want to tell me more?"
+    },
+    "airpiano": {
+      "desc": "Air piano: play notes by moving your fingers in front of the webcam."
+    },
+    "rein": {
+      "desc": "Local Jarvis-style voice assistant for Windows 11, in Spanish.",
+      "badge": "Desktop app · executable",
+      "listening": "> listening…",
+      "wake": "\"Rein, can you hear me?\"",
+      "noUi": "No web UI — it lives on your PC"
+    }
+  },
+  "contact": {
+    "pitch": "Shall we build something together? Reach out or check my code.",
+    "githubTitle": "My code lives here",
+    "githubCta": "View GitHub profile",
+    "emailLabel": "Email",
+    "linkedinLabel": "LinkedIn"
+  },
+  "preloader": {
+    "loading": "Loading",
+    "init": "> BOOTING PORTFOLIO.SYS",
+    "world": "> LOADING WORLD"
+  },
+  "footer": {
+    "credits": "© 2026 DIEGO GOMEZ — built with Next.js",
+    "backToTop": "Back to top"
+  }
+}

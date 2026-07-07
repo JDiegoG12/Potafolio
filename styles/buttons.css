@@ -1,0 +1,245 @@
+/* ============================================================
+   Botones temáticos (CLAUDE.md §6.2). CSS puro seleccionado por
+   [data-theme] en el root: cero JS, SSR-friendly, y el botón se
+   transforma al instante al viajar de mundo. Mismo lenguaje de
+   formas que los portales. Con prefers-reduced-motion el
+   kill-switch global congela shimmer/scanline/pulso; los estados
+   hover/active quedan como cambios instantáneos.
+   ============================================================ */
+
+.btn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.8rem 2.2rem;
+  font-family: var(--font-sub);
+  font-size: 1.075rem;
+  line-height: 1.2;
+  cursor: pointer;
+  border: 0;
+  text-decoration: none;
+  overflow: hidden;
+  /* Contexto propio: permite capas de efecto bajo el texto (z-index -1)
+     sin que caigan detrás del fondo del botón */
+  isolation: isolate;
+  transition:
+    transform var(--dur-fast) var(--ease-theme),
+    filter var(--dur-fast) var(--ease-theme),
+    box-shadow var(--dur-fast) var(--ease-theme),
+    background-color var(--dur-fast) var(--ease-theme);
+}
+
+/* ── Teyvat: elegante, aura dorada, shimmer al hover ──────── */
+
+[data-theme="teyvat"] .btn {
+  border-radius: 999px;
+  background: linear-gradient(165deg, #dcb84a 0%, var(--primary) 55%, #ab8a1e 100%);
+  color: var(--text-on-primary);
+  box-shadow:
+    0 0 0 1px rgba(255, 245, 215, 0.75),
+    0 0 18px var(--glow),
+    inset 0 1px 0 rgba(255, 255, 255, 0.55);
+}
+
+/* Banda de luz: barre una vez por hover (transición, no bucle).
+   z-index -1 la pinta sobre el oro pero BAJO el texto: la luz recorre
+   el metal sin tapar las letras (legibilidad, CLAUDE.md §6.2). */
+[data-theme="teyvat"] .btn::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: inherit;
+  background: linear-gradient(
+    105deg,
+    transparent 38%,
+    rgba(255, 255, 255, 0.5) 50%,
+    transparent 62%
+  );
+  background-size: 250% 100%;
+  background-repeat: no-repeat;
+  background-position: 180% 0;
+  transition: background-position 0.7s ease;
+}
+
+[data-theme="teyvat"] .btn:hover {
+  transform: translateY(-2px);
+  box-shadow:
+    0 0 0 1px rgba(255, 245, 215, 0.9),
+    0 0 30px var(--glow),
+    inset 0 1px 0 rgba(255, 255, 255, 0.6);
+}
+
+[data-theme="teyvat"] .btn:hover::before {
+  background-position: -80% 0;
+}
+
+[data-theme="teyvat"] .btn:active {
+  transform: translateY(0) scale(0.98);
+}
+
+/* ── Gym: bloque pesado, esquina cercenada, impacto ───────── */
+
+[data-theme="gym"] .btn {
+  clip-path: polygon(
+    0 0,
+    calc(100% - 14px) 0,
+    100% 14px,
+    100% 100%,
+    0 100%
+  );
+  background: var(--primary);
+  color: var(--text-on-primary);
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  font-weight: 600;
+  /* Peso físico: sombra dura tipo bloque (drop-shadow sigue el recorte) */
+  filter: drop-shadow(5px 5px 0 rgba(0, 0, 0, 0.65));
+}
+
+/* Flash de impacto al hover */
+[data-theme="gym"] .btn::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: #fff;
+  opacity: 0;
+}
+
+[data-theme="gym"] .btn:hover {
+  /* se hunde hacia la sombra: press */
+  transform: translate(3px, 3px);
+  filter: drop-shadow(2px 2px 0 rgba(0, 0, 0, 0.65));
+  background: var(--primary-strong);
+}
+
+[data-theme="gym"] .btn:hover::before {
+  animation: btn-impact 0.28s ease-out 1;
+}
+
+[data-theme="gym"] .btn:active {
+  transform: translate(5px, 5px);
+  filter: drop-shadow(0 0 0 rgba(0, 0, 0, 0.65));
+}
+
+@keyframes btn-impact {
+  0% {
+    opacity: 0.4;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+/* ── Cyber: HUD biselado, corchetes, glow pulsante ────────── */
+
+[data-theme="cyber"] .btn {
+  clip-path: polygon(
+    8px 0,
+    calc(100% - 8px) 0,
+    100% 8px,
+    100% calc(100% - 8px),
+    calc(100% - 8px) 100%,
+    8px 100%,
+    0 calc(100% - 8px),
+    0 8px
+  );
+  background: rgba(0, 229, 255, 0.08);
+  color: var(--primary);
+  font-family: var(--font-body);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  box-shadow: inset 0 0 0 1px var(--primary), inset 0 0 16px rgba(0, 229, 255, 0.12);
+  /* El glow exterior va en el wrapper .btn-glow (drop-shadow sigue la forma) */
+}
+
+/* Corchetes HUD que se abren al hover */
+[data-theme="cyber"] .btn::before,
+[data-theme="cyber"] .btn::after {
+  font-family: var(--font-mono);
+  font-weight: 400;
+  opacity: 0.7;
+  transition: transform var(--dur-fast) var(--ease-theme), opacity var(--dur-fast) ease;
+}
+
+[data-theme="cyber"] .btn::before {
+  content: "[";
+}
+
+[data-theme="cyber"] .btn::after {
+  content: "]";
+}
+
+/* Hover: glow pulsante + scanline vertical mientras dura */
+[data-theme="cyber"] .btn:hover {
+  background-color: rgba(0, 229, 255, 0.14);
+  background-image: linear-gradient(
+    to bottom,
+    transparent 0 44%,
+    rgba(0, 229, 255, 0.22) 48% 52%,
+    transparent 56%
+  );
+  background-size: 100% 300%;
+  background-repeat: no-repeat;
+  animation:
+    btn-hud-pulse 1.2s ease-in-out infinite,
+    btn-hud-scan 1.2s linear infinite;
+}
+
+[data-theme="cyber"] .btn:hover::before {
+  transform: translateX(-4px);
+  opacity: 1;
+}
+
+[data-theme="cyber"] .btn:hover::after {
+  transform: translateX(4px);
+  opacity: 1;
+}
+
+[data-theme="cyber"] .btn:active {
+  transform: scale(0.97);
+}
+
+@keyframes btn-hud-pulse {
+  0%,
+  100% {
+    box-shadow: inset 0 0 0 1px var(--primary), inset 0 0 16px rgba(0, 229, 255, 0.12);
+  }
+  50% {
+    box-shadow: inset 0 0 0 1px var(--primary), inset 0 0 28px rgba(0, 229, 255, 0.3);
+  }
+}
+
+@keyframes btn-hud-scan {
+  from {
+    background-position: 0 -120%;
+  }
+  to {
+    background-position: 0 220%;
+  }
+}
+
+/* Wrapper del botón. En Cyber aporta el glow exterior con drop-shadow
+   (el clip-path del botón recortaría un box-shadow exterior). */
+.btn-glow {
+  display: inline-block;
+}
+
+[data-theme="cyber"] .btn-glow {
+  filter: drop-shadow(0 0 8px var(--glow));
+}
+
+/* ── Foco por teclado, por tema ───────────────────────────── */
+
+.btn:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 3px;
+}
+
+[data-theme="gym"] .btn:focus-visible,
+[data-theme="cyber"] .btn:focus-visible {
+  outline-color: var(--accent);
+}

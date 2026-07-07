@@ -1,0 +1,254 @@
+/* ============================================================
+   Efectos de título por tema (CLAUDE.md §6.1) — firma visual.
+   Técnica: el título lleva data-text y los efectos se pintan en
+   pseudo-elementos que clonan el texto (content: attr(data-text))
+   con background-clip: text. El texto base conserva su color de
+   token; el efecto es una capa encima. Con prefers-reduced-motion
+   el kill-switch global congela las bandas fuera del texto
+   (estático limpio) y el glitch ni se programa (JS).
+   ============================================================ */
+
+.title-fx {
+  position: relative;
+  display: inline-block;
+}
+
+.title-fx::before,
+.title-fx::after {
+  pointer-events: none;
+  user-select: none;
+}
+
+/* ── Teyvat — "Aurea": shimmer dorado + resplandor suave ──── */
+
+[data-theme="teyvat"] .title-fx {
+  text-shadow: 0 0 28px rgba(201, 162, 39, 0.3);
+}
+
+[data-theme="teyvat"] .title-fx::before {
+  content: attr(data-text);
+  position: absolute;
+  inset: 0;
+  background-image: linear-gradient(
+    105deg,
+    transparent 40%,
+    rgba(255, 240, 190, 0.95) 50%,
+    transparent 60%
+  );
+  background-size: 200% 100%;
+  background-repeat: no-repeat;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: title-shimmer 5.5s ease-in-out infinite;
+}
+
+/* La banda barre en el primer 40% del ciclo y luego descansa */
+@keyframes title-shimmer {
+  0% {
+    background-position: 180% 0;
+  }
+  40% {
+    background-position: -80% 0;
+  }
+  100% {
+    background-position: -80% 0;
+  }
+}
+
+/* ── Gym — "Acero": sombreado metálico + rayado + onda ────── */
+
+[data-theme="gym"] .title-fx::before {
+  content: attr(data-text);
+  position: absolute;
+  inset: 0;
+  background-image:
+    /* onda de brillo (única capa animada) */
+    linear-gradient(
+      105deg,
+      transparent 42%,
+      rgba(255, 255, 255, 0.75) 50%,
+      transparent 58%
+    ),
+    /* rayado metálico fino */
+    repeating-linear-gradient(
+      115deg,
+      rgba(255, 255, 255, 0.09) 0 1px,
+      transparent 1px 6px
+    ),
+    /* sombreado de acero pulido (sutil sobre el color base) */
+    linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0.32) 0%,
+      rgba(255, 255, 255, 0) 38%,
+      rgba(0, 0, 0, 0.35) 52%,
+      rgba(255, 255, 255, 0.1) 62%,
+      rgba(0, 0, 0, 0.28) 100%
+    );
+  background-size:
+    220% 100%,
+    auto,
+    auto;
+  background-repeat: no-repeat, repeat, repeat;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: title-steel 6s linear infinite;
+}
+
+@keyframes title-steel {
+  0% {
+    background-position:
+      190% 0,
+      0 0,
+      0 0;
+  }
+  18% {
+    background-position:
+      -90% 0,
+      0 0,
+      0 0;
+  }
+  100% {
+    background-position:
+      -90% 0,
+      0 0,
+      0 0;
+  }
+}
+
+/* Flash de reflejo al entrar en viewport (una vez, via data-flash) */
+[data-theme="gym"] .title-fx[data-flash="true"]::after {
+  content: attr(data-text);
+  position: absolute;
+  inset: 0;
+  background-image: linear-gradient(
+    105deg,
+    transparent 30%,
+    rgba(255, 255, 255, 0.9) 50%,
+    transparent 70%
+  );
+  background-size: 220% 100%;
+  background-repeat: no-repeat;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: title-steel-flash 0.7s ease-out 1 both;
+}
+
+@keyframes title-steel-flash {
+  from {
+    background-position: 190% 0;
+  }
+  to {
+    background-position: -90% 0;
+  }
+}
+
+/* ── Cyber — "Glitch": ráfagas breves, desfasadas por título ─ */
+
+/* En reposo: limpio. El estado lo pone el timer JS por instancia. */
+[data-theme="cyber"] .title-fx[data-glitching="true"] {
+  /* jitter del texto base + scanline que cruza el bloque */
+  background-image: linear-gradient(
+    to bottom,
+    transparent 0 47%,
+    rgba(0, 229, 255, 0.25) 49% 51%,
+    transparent 53%
+  );
+  background-size: 100% 300%;
+  background-repeat: no-repeat;
+  animation:
+    title-jitter 0.36s step-end 1,
+    title-scanline 0.36s linear 1;
+}
+
+[data-theme="cyber"] .title-fx[data-glitching="true"]::before,
+[data-theme="cyber"] .title-fx[data-glitching="true"]::after {
+  content: attr(data-text);
+  position: absolute;
+  inset: 0;
+  mix-blend-mode: screen;
+}
+
+/* Slice cyan */
+[data-theme="cyber"] .title-fx[data-glitching="true"]::before {
+  color: rgba(0, 229, 255, 0.85);
+  animation: title-glitch-a 0.36s step-end 1 both;
+}
+
+/* Slice magenta */
+[data-theme="cyber"] .title-fx[data-glitching="true"]::after {
+  color: rgba(255, 46, 196, 0.85);
+  animation: title-glitch-b 0.36s step-end 1 both;
+}
+
+@keyframes title-jitter {
+  0% {
+    transform: translate(-1px, 1px);
+  }
+  30% {
+    transform: translate(2px, -1px);
+  }
+  60% {
+    transform: translate(-2px, 0);
+  }
+  100% {
+    transform: none;
+  }
+}
+
+@keyframes title-scanline {
+  from {
+    background-position: 0 -120%;
+  }
+  to {
+    background-position: 0 220%;
+  }
+}
+
+@keyframes title-glitch-a {
+  0% {
+    clip-path: inset(8% 0 76% 0);
+    transform: translate(-5px, -2px);
+    opacity: 1;
+  }
+  25% {
+    clip-path: inset(58% 0 12% 0);
+    transform: translate(4px, 1px);
+  }
+  50% {
+    clip-path: inset(32% 0 48% 0);
+    transform: translate(-3px, 2px);
+  }
+  75% {
+    clip-path: inset(74% 0 6% 0);
+    transform: translate(5px, -1px);
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes title-glitch-b {
+  0% {
+    clip-path: inset(64% 0 10% 0);
+    transform: translate(4px, 2px);
+    opacity: 1;
+  }
+  25% {
+    clip-path: inset(12% 0 70% 0);
+    transform: translate(-5px, -1px);
+  }
+  50% {
+    clip-path: inset(45% 0 38% 0);
+    transform: translate(3px, -2px);
+  }
+  75% {
+    clip-path: inset(4% 0 82% 0);
+    transform: translate(-4px, 1px);
+  }
+  100% {
+    opacity: 0;
+  }
+}

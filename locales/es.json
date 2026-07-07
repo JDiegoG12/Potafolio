@@ -1,0 +1,93 @@
+{
+  "nav": {
+    "home": "Inicio",
+    "about": "Sobre mí",
+    "projects": "Proyectos",
+    "contact": "Contacto",
+    "worlds": "Elige tu mundo",
+    "openMenu": "Abrir menú",
+    "closeMenu": "Cerrar menú",
+    "primary": "Navegación principal",
+    "skip": "Saltar al contenido"
+  },
+  "lang": {
+    "label": "Cambiar idioma"
+  },
+  "sound": {
+    "unmute": "Activar sonido",
+    "mute": "Silenciar"
+  },
+  "themes": {
+    "active": "Mundo activo",
+    "switchTo": "Viajar a {{world}}",
+    "teyvat": { "tagline": "Cielos abiertos y magia elemental" },
+    "gym": { "tagline": "Hierro, sudor y disciplina" },
+    "cyber": { "tagline": "Neón, HUD y precisión" }
+  },
+  "hero": {
+    "kicker": "Desarrollador con IA",
+    "name": "DIEGO GOMEZ",
+    "tagline": "Construyendo el futuro, un prompt a la vez.",
+    "cta": "Ver proyectos"
+  },
+  "sections": {
+    "about": "Sobre mí",
+    "projects": "Proyectos destacados",
+    "chill": "Proyectos chill",
+    "contact": "Contacto"
+  },
+  "about": {
+    "bioShort": "[BIO_CORTA]",
+    "bioLong": "[BIO_LARGA]",
+    "photoAlt": "Foto de Diego Gomez — versión {{world}}"
+  },
+  "projects": {
+    "links": {
+      "demo": "Ver demo",
+      "code": "Código",
+      "frontend": "Frontend",
+      "backend": "Backend",
+      "github": "GitHub"
+    },
+    "stack": "Stack",
+    "flagship": "Proyecto insignia",
+    "kob": {
+      "desc": "Plataforma e-commerce de joyería con catálogo y panel de administración."
+    },
+    "barberia": {
+      "desc": "Frontend Angular para reservas y gestión de una barbería."
+    },
+    "aimo": {
+      "desc": "Asistente conversacional con IA para acompañamiento emocional de estudiantes universitarios.",
+      "note": "Acompañamiento inicial — no sustituye ayuda profesional.",
+      "bubbleUser": "Hola, hoy fue un día pesado…",
+      "bubbleBot": "Estoy aquí para escucharte. ¿Quieres contarme más?"
+    },
+    "airpiano": {
+      "desc": "Piano en el aire: tocas notas moviendo los dedos frente a la cámara."
+    },
+    "rein": {
+      "desc": "Asistente de voz local tipo Jarvis para Windows 11, en español.",
+      "badge": "App de escritorio · ejecutable",
+      "listening": "> escuchando…",
+      "wake": "\"Oye, Rein, ¿me escuchas?\"",
+      "noUi": "Sin interfaz web — vive en tu PC"
+    }
+  },
+  "contact": {
+    "pitch": "¿Construimos algo juntos? Escríbeme o revisa mi código.",
+    "githubTitle": "Mi código vive aquí",
+    "githubCta": "Ver perfil de GitHub",
+    "emailLabel": "Email",
+    "linkedinLabel": "LinkedIn"
+  },
+  "preloader": {
+    "loading": "Cargando",
+    "init": "> INICIANDO PORTFOLIO.SYS",
+    "world": "> CARGANDO MUNDO"
+  },
+  "footer": {
+    "credits": "© 2026 DIEGO GOMEZ — hecho con Next.js",
+    "backToTop": "Volver arriba"
+  }
+}

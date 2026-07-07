@@ -1,0 +1,429 @@
+/* ============================================================
+   CTA del hero — variante "showpiece" (CLAUDE.md §6.2).
+   Solo el CTA del hero lleva .btn-showpiece; la base .btn queda
+   intacta para que el resto de botones se mantengan sobrios.
+   Principios: (1) reposo con vida propia, (2) superficie con
+   profundidad/textura, (3) hover rico y temático.
+   Reduced-motion: el kill-switch global colapsa cada animation a
+   una pasada de 0.01ms sin fill => los bucles (shimmer, latido,
+   scanline, parpadeo, chispas, glitch) desaparecen y queda el
+   reposo estático, que por eso debe verse completo sin animar.
+   ============================================================ */
+
+.btn-showpiece {
+  padding: 0.95rem 2.6rem;
+  font-size: 1.15rem;
+}
+
+/* Wrapper: ancla las chispas (viven fuera del overflow:hidden del
+   botón para poder emanar más allá del borde) */
+.btn-glow-showpiece {
+  position: relative;
+}
+
+.btn-sparks {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  display: none;
+}
+
+.btn-sys {
+  display: none;
+}
+
+/* ════════════ Teyvat: artefacto dorado ════════════ */
+
+/* Reposo: metal pulido con profundidad (highlight de curvatura
+   arriba, peso abajo) + aura que respira con latido lentísimo */
+[data-theme="teyvat"] .btn-showpiece {
+  background:
+    radial-gradient(120% 95% at 50% -12%, rgba(255, 255, 255, 0.42), transparent 58%),
+    linear-gradient(
+      178deg,
+      #eed382 0%,
+      #dcb84a 26%,
+      var(--primary) 52%,
+      #a07f16 86%,
+      #8d6e10 100%
+    );
+  /* Igual al 0% del latido: con reduced-motion (sin animación) el
+     reposo conserva la profundidad completa */
+  box-shadow:
+    0 0 0 1px rgba(255, 245, 215, 0.8),
+    0 0 16px var(--glow),
+    0 6px 22px rgba(140, 106, 20, 0.28),
+    inset 0 1px 0 rgba(255, 255, 255, 0.6),
+    inset 0 -2px 4px rgba(90, 64, 10, 0.4);
+  animation: hero-teyvat-breathe 6s ease-in-out infinite;
+}
+
+@keyframes hero-teyvat-breathe {
+  0%,
+  100% {
+    box-shadow:
+      0 0 0 1px rgba(255, 245, 215, 0.8),
+      0 0 16px var(--glow),
+      0 6px 22px rgba(140, 106, 20, 0.28),
+      inset 0 1px 0 rgba(255, 255, 255, 0.6),
+      inset 0 -2px 4px rgba(90, 64, 10, 0.4);
+  }
+  50% {
+    box-shadow:
+      0 0 0 1px rgba(255, 245, 215, 0.9),
+      0 0 30px var(--glow),
+      0 6px 26px rgba(140, 106, 20, 0.34),
+      inset 0 1px 0 rgba(255, 255, 255, 0.6),
+      inset 0 -2px 4px rgba(90, 64, 10, 0.4);
+  }
+}
+
+/* Shimmer ambiental: el reflejo cruza el metal ocasionalmente
+   (bucle lento con pausa larga), siempre BAJO el texto (z -1).
+   Sustituye a la transición por hover de la variante estándar. */
+[data-theme="teyvat"] .btn-showpiece::before {
+  transition: none;
+  animation: hero-teyvat-shimmer 7s ease-in-out infinite;
+}
+
+@keyframes hero-teyvat-shimmer {
+  0% {
+    background-position: 180% 0;
+  }
+  26%,
+  100% {
+    background-position: -80% 0;
+  }
+}
+
+/* Filigrana: línea dorada fina interior (doble borde con el anillo
+   crema exterior del box-shadow) */
+[data-theme="teyvat"] .btn-showpiece::after {
+  content: "";
+  position: absolute;
+  inset: 3px;
+  border-radius: inherit;
+  border: 1px solid rgba(255, 250, 228, 0.55);
+  pointer-events: none;
+}
+
+/* Hover: el shimmer se acelera e intensifica; el aura se enciende */
+[data-theme="teyvat"] .btn-showpiece:hover::before {
+  background-image: linear-gradient(
+    105deg,
+    transparent 38%,
+    rgba(255, 255, 255, 0.7) 50%,
+    transparent 62%
+  );
+  animation: hero-teyvat-shimmer 1.1s ease-in-out infinite;
+}
+
+[data-theme="teyvat"] .btn-showpiece:hover {
+  transform: translateY(-2px);
+  animation: none;
+  box-shadow:
+    0 0 0 1px rgba(255, 245, 215, 1),
+    0 0 38px var(--glow),
+    0 8px 28px rgba(140, 106, 20, 0.38),
+    inset 0 1px 0 rgba(255, 255, 255, 0.65),
+    inset 0 -2px 4px rgba(90, 64, 10, 0.4);
+}
+
+/* :active debe ganar a la regla de hover de esta hoja (misma
+   especificidad; el orden decide) */
+[data-theme="teyvat"] .btn-showpiece:active {
+  transform: translateY(0) scale(0.98);
+}
+
+/* Chispas doradas que emanan al hover (discretas) */
+[data-theme="teyvat"] .btn-glow-showpiece .btn-sparks {
+  display: block;
+}
+
+[data-theme="teyvat"] .btn-sparks i {
+  position: absolute;
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: radial-gradient(circle, #fff8e0 0%, var(--primary) 70%);
+  box-shadow: 0 0 6px var(--glow);
+  opacity: 0;
+}
+
+[data-theme="teyvat"] .btn-glow-showpiece:hover .btn-sparks i {
+  animation: hero-spark 1.3s ease-out infinite;
+}
+
+@keyframes hero-spark {
+  0% {
+    opacity: 0;
+    transform: translate(0, 0) scale(0.4);
+  }
+  18% {
+    opacity: 0.9;
+  }
+  100% {
+    opacity: 0;
+    transform: translate(var(--dx, 0), var(--dy, -18px)) scale(1);
+  }
+}
+
+[data-theme="teyvat"] .btn-sparks i:nth-child(1) { left: 12%; top: 15%; --dx: -8px;  --dy: -20px; animation-delay: 0s; }
+[data-theme="teyvat"] .btn-sparks i:nth-child(2) { left: 30%; top: -6%; --dx: 5px;   --dy: -16px; animation-delay: 0.45s; }
+[data-theme="teyvat"] .btn-sparks i:nth-child(3) { left: 52%; top: -10%; --dx: -4px; --dy: -18px; animation-delay: 0.9s; }
+[data-theme="teyvat"] .btn-sparks i:nth-child(4) { left: 72%; top: -4%; --dx: 9px;   --dy: -15px; animation-delay: 0.2s; }
+[data-theme="teyvat"] .btn-sparks i:nth-child(5) { left: 90%; top: 22%; --dx: 12px;  --dy: -12px; animation-delay: 0.65s; }
+[data-theme="teyvat"] .btn-sparks i:nth-child(6) { left: 42%; top: 100%; --dx: -6px; --dy: 14px;  animation-delay: 0.35s; }
+[data-theme="teyvat"] .btn-sparks i:nth-child(7) { left: 68%; top: 104%; --dx: 8px;  --dy: 12px;  animation-delay: 0.8s; }
+
+/* ════════════ Gym: bloque de acero ════════════ */
+
+/* Reposo: textura real — rayado metálico fino + diagonales de
+   peligro tenues + volumen vertical. La sombra dura offset sin
+   blur viene de la base. */
+[data-theme="gym"] .btn-showpiece {
+  background:
+    repeating-linear-gradient(
+      115deg,
+      rgba(255, 255, 255, 0.055) 0 1px,
+      transparent 1px 7px
+    ),
+    repeating-linear-gradient(
+      -45deg,
+      rgba(0, 0, 0, 0.11) 0 10px,
+      transparent 10px 24px
+    ),
+    linear-gradient(180deg, #ff554b 0%, var(--primary) 42%, #c11e14 100%);
+}
+
+/* Highlight de acero que recorre el bloque ocasionalmente
+   (reposo con vida; eco del efecto de los títulos Gym) */
+[data-theme="gym"] .btn-showpiece::before {
+  background: linear-gradient(
+    100deg,
+    transparent 40%,
+    rgba(255, 255, 255, 0.28) 50%,
+    transparent 60%
+  );
+  background-size: 240% 100%;
+  background-repeat: no-repeat;
+  background-position: 200% 0;
+  opacity: 1;
+  animation: hero-gym-sheen 7s ease-in-out infinite;
+}
+
+@keyframes hero-gym-sheen {
+  0% {
+    background-position: 200% 0;
+  }
+  22%,
+  100% {
+    background-position: -100% 0;
+  }
+}
+
+/* Filo metálico en la esquina cercenada: barra acero centrada en la
+   diagonal del corte; el clip-path del botón la recorta en un filo */
+[data-theme="gym"] .btn-showpiece::after {
+  content: "";
+  position: absolute;
+  top: 5px;
+  right: -4px;
+  width: 24px;
+  height: 4px;
+  transform: rotate(45deg);
+  background: linear-gradient(90deg, #e6e6ec 0%, #9a9aa2 60%, #6f6f78 100%);
+}
+
+/* Hover: impacto — sobrepasa el press, micro-shake y asienta hacia
+   la sombra + flash de líneas de energía diagonales */
+[data-theme="gym"] .btn-showpiece:hover {
+  animation: hero-gym-press 0.3s var(--ease-theme) 1 both;
+}
+
+@keyframes hero-gym-press {
+  0% {
+    transform: translate(0, 0);
+  }
+  35% {
+    transform: translate(4.5px, 4.5px);
+  }
+  55% {
+    transform: translate(2.4px, 3.2px);
+  }
+  75% {
+    transform: translate(3.5px, 2.6px);
+  }
+  100% {
+    transform: translate(3px, 3px);
+  }
+}
+
+[data-theme="gym"] .btn-showpiece:hover::before {
+  background:
+    repeating-linear-gradient(
+      -45deg,
+      rgba(255, 255, 255, 0.9) 0 8px,
+      transparent 8px 22px
+    );
+  animation: hero-gym-energy 0.32s ease-out 1 both;
+}
+
+@keyframes hero-gym-energy {
+  0% {
+    opacity: 0.55;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+/* :active recupera el hundimiento total de la base */
+[data-theme="gym"] .btn-showpiece:active {
+  animation: none;
+}
+
+/* ════════════ Cyber: HUD vivo ════════════ */
+
+/* Reposo: scanline tenue en bucle lento */
+[data-theme="cyber"] .btn-showpiece {
+  background-image: linear-gradient(
+    to bottom,
+    transparent 0 44%,
+    rgba(0, 229, 255, 0.1) 48% 52%,
+    transparent 56%
+  );
+  background-size: 100% 300%;
+  background-repeat: no-repeat;
+  background-position: 0 -120%;
+  animation: btn-hud-scan 3.6s linear infinite;
+}
+
+/* Glow del borde con parpadeo irregular casi imperceptible (neón) */
+[data-theme="cyber"] .btn-glow-showpiece {
+  animation: hero-cyber-flicker 5s step-end infinite;
+}
+
+@keyframes hero-cyber-flicker {
+  0%,
+  100% {
+    filter: drop-shadow(0 0 8px var(--glow));
+  }
+  88% {
+    filter: drop-shadow(0 0 5px var(--glow));
+  }
+  89.5% {
+    filter: drop-shadow(0 0 9px var(--glow));
+  }
+  94% {
+    filter: drop-shadow(0 0 12px var(--glow));
+  }
+  95.5% {
+    filter: drop-shadow(0 0 8px var(--glow));
+  }
+}
+
+/* Hover: borde neón intensificado; los brackets se CIERRAN sobre el
+   texto (inverso a la variante estándar) */
+[data-theme="cyber"] .btn-showpiece:hover {
+  box-shadow:
+    inset 0 0 0 1.5px var(--primary),
+    inset 0 0 26px rgba(0, 229, 255, 0.28);
+  animation:
+    btn-hud-scan 1.2s linear infinite,
+    btn-hud-pulse 1.2s ease-in-out infinite;
+}
+
+[data-theme="cyber"] .btn-glow-showpiece:hover {
+  animation: none;
+  filter: drop-shadow(0 0 14px var(--glow));
+}
+
+[data-theme="cyber"] .btn-showpiece:hover::before {
+  transform: translateX(3px);
+}
+
+[data-theme="cyber"] .btn-showpiece:hover::after {
+  transform: translateX(-3px);
+}
+
+/* Glitch breve del texto al entrar el hover (ráfaga única; los
+   clones terminan ocultos gracias a `both`) */
+[data-theme="cyber"] .btn-showpiece .btn-label {
+  position: relative;
+}
+
+[data-theme="cyber"] .btn-showpiece:hover .btn-label::before,
+[data-theme="cyber"] .btn-showpiece:hover .btn-label::after {
+  content: attr(data-text);
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+[data-theme="cyber"] .btn-showpiece:hover .btn-label::before {
+  color: var(--primary);
+  animation: hero-glitch-a 0.32s step-end 1 both;
+}
+
+[data-theme="cyber"] .btn-showpiece:hover .btn-label::after {
+  color: var(--secondary);
+  animation: hero-glitch-b 0.32s step-end 1 both;
+}
+
+@keyframes hero-glitch-a {
+  0% {
+    opacity: 0.85;
+    transform: translate(-2px, -1px);
+    clip-path: inset(8% 0 55% 0);
+  }
+  33% {
+    transform: translate(2px, 1px);
+    clip-path: inset(52% 0 12% 0);
+  }
+  66% {
+    transform: translate(-1px, 0);
+    clip-path: inset(30% 0 34% 0);
+  }
+  100% {
+    opacity: 0;
+    clip-path: inset(50% 0 50% 0);
+  }
+}
+
+@keyframes hero-glitch-b {
+  0% {
+    opacity: 0.85;
+    transform: translate(2px, 1px);
+    clip-path: inset(60% 0 8% 0);
+  }
+  33% {
+    transform: translate(-2px, -1px);
+    clip-path: inset(10% 0 62% 0);
+  }
+  66% {
+    transform: translate(1px, 1px);
+    clip-path: inset(44% 0 22% 0);
+  }
+  100% {
+    opacity: 0;
+    clip-path: inset(50% 0 50% 0);
+  }
+}
+
+/* Micro-texto de sistema (esquina, solo hover) */
+[data-theme="cyber"] .btn-showpiece .btn-sys {
+  display: block;
+  position: absolute;
+  right: 14px;
+  bottom: 3px;
+  font-family: var(--font-mono);
+  font-size: 8px;
+  letter-spacing: 0.1em;
+  opacity: 0;
+  transition: opacity var(--dur-fast) ease;
+}
+
+[data-theme="cyber"] .btn-showpiece:hover .btn-sys {
+  opacity: 0.75;
+}

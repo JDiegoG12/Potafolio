@@ -1,0 +1,169 @@
+@import "tailwindcss";
+@import "./themes.css";
+@import "./portals.css";
+@import "./title-effects.css";
+@import "./buttons.css";
+@import "./hero-cta.css";
+@import "./projects.css";
+@import "./backgrounds.css";
+
+/* Expone los tokens por tema como utilidades de Tailwind v4:
+   bg-bg, text-text, text-primary, font-display, rounded-lg (via --radius-*), etc. */
+@theme inline {
+  --color-bg: var(--bg);
+  --color-bg-soft: var(--bg-soft);
+  --color-surface: var(--surface);
+  --color-surface-solid: var(--surface-solid);
+  --color-border: var(--border);
+  --color-text: var(--text);
+  --color-text-muted: var(--text-muted);
+  --color-on-primary: var(--text-on-primary);
+  --color-primary: var(--primary);
+  --color-primary-strong: var(--primary-strong);
+  --color-secondary: var(--secondary);
+  --color-accent: var(--accent);
+  --color-accent-ink: var(--accent-ink);
+  --color-glow: var(--glow);
+
+  --font-display: var(--font-display);
+  --font-sub: var(--font-sub);
+  --font-body: var(--font-body);
+  --font-mono: var(--font-mono);
+
+  --radius-sm: var(--radius-sm);
+  --radius-md: var(--radius-md);
+  --radius-lg: var(--radius-lg);
+
+  --shadow-card: var(--shadow-card);
+  --shadow-glow: var(--shadow-glow);
+
+  --ease-theme: var(--ease-theme);
+}
+
+html {
+  /* Fallback nativo (reduced-motion / sin JS); con Lenis activo lo
+     desactiva .lenis-smooth para no suavizar dos veces. */
+  scroll-behavior: smooth;
+  /* Reserva el hueco del scrollbar aunque desaparezca (viaje de tema y
+     menú móvil bloquean el scroll con overflow: hidden): sin esto, el
+     contenido saltaba ~15px al quitarse/reponerse la barra. */
+  scrollbar-gutter: stable;
+}
+
+/* Foco por teclado visible y temático en todos los interactivos.
+   :focus-visible no dispara con click de ratón, así que no ensucia
+   la interacción con puntero. */
+:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+
+/* CSS recomendado de Lenis (scroll suave sobre window) */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+/* Elementos con scroll propio (menú móvil) que Lenis no debe secuestrar */
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+body {
+  background-color: var(--bg);
+  color: var(--text);
+  font-family: var(--font-body);
+  /* Innegociable: nada de scroll horizontal accidental (CLAUDE.md §8). */
+  overflow-x: clip;
+  min-height: 100dvh;
+  transition:
+    background-color var(--dur-base) var(--ease-theme),
+    color var(--dur-base) var(--ease-theme);
+}
+
+/* Fondo de escena en capa fija compositada: background-attachment: fixed
+   fuerza repintados carísimos en móvil (medido durante las view
+   transitions); una capa position: fixed se pinta una vez y se composita. */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background: var(--scene);
+  pointer-events: none;
+}
+
+h1,
+h2,
+h3 {
+  font-family: var(--font-display);
+  letter-spacing: var(--tracking-display);
+  text-transform: var(--display-transform);
+  text-wrap: balance;
+}
+
+/* Los overrides de ::view-transition-* viven como <style> inline en
+   app/layout.tsx: LightningCSS (Tailwind v4) descarta esos selectores
+   si se escriben aquí. */
+
+/* Skip-link: invisible hasta recibir foco por teclado */
+.skip-link {
+  position: fixed;
+  top: 0.75rem;
+  left: 0.75rem;
+  z-index: 100;
+  padding: 0.6rem 1.1rem;
+  border-radius: var(--radius-md);
+  background: var(--primary);
+  color: var(--text-on-primary);
+  font-family: var(--font-sub);
+  font-size: 0.9rem;
+  text-decoration: none;
+  transform: translateY(-200%);
+}
+
+.skip-link:focus-visible {
+  transform: translateY(0);
+}
+
+/* Cursor nativo oculto mientras el cursor custom está activo */
+.has-custom-cursor,
+.has-custom-cursor * {
+  cursor: none !important;
+}
+
+@keyframes preloader-spin {
+  to {
+    transform: rotate(405deg);
+  }
+}
+
+::selection {
+  background: var(--primary);
+  color: var(--text-on-primary);
+}
+
+/* Accesibilidad: desactiva animaciones intensas si el usuario lo pide.
+   Las animaciones de Framer Motion se controlan además con useReducedMotion. */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

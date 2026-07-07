@@ -1,0 +1,359 @@
+/* ============================================================
+   Portales — mini-escenas vivas de cada mundo (CLAUDE.md §4.1).
+   Cada escena muestra SIEMPRE su propio mundo con valores fijos,
+   independientemente del tema activo. Reutilizadas en 3 tamaños:
+   trigger de navbar, preview de hover y tarjeta grande móvil.
+   ============================================================ */
+
+/* ── Siluetas por mundo ──────────────────────────────────────
+   Compartidas entre el marco y la capa de escena animada: las capas
+   con animación compuesta pueden escaparse del clip del ancestro
+   (quirk de compositing), así que cada capa se recorta a la MISMA
+   forma por sí misma. Gym/Cyber no son rectangulares: overflow
+   hidden no basta. */
+
+:root {
+  --portal-clip-gym: polygon(
+    0 0,
+    calc(100% - 12px) 0,
+    100% 12px,
+    100% 100%,
+    0 100%
+  );
+  --portal-clip-cyber: polygon(
+    8px 0,
+    calc(100% - 8px) 0,
+    100% 8px,
+    100% calc(100% - 8px),
+    calc(100% - 8px) 100%,
+    8px 100%,
+    0 calc(100% - 8px),
+    0 8px
+  );
+}
+
+/* ── Marco: forma y borde con carácter por mundo ─────────── */
+
+.portal-frame {
+  position: relative;
+  display: block;
+  overflow: hidden;
+}
+
+/* Teyvat: orgánico — píldora en trigger, arco de ventana en grande */
+.portal-frame[data-world="teyvat"] {
+  border-radius: 999px;
+  box-shadow:
+    0 0 0 1px rgba(201, 162, 39, 0.55),
+    0 4px 16px rgba(201, 162, 39, 0.25);
+}
+
+.portal-frame[data-world="teyvat"][data-size="preview"],
+.portal-frame[data-world="teyvat"][data-size="card"] {
+  border-radius: 4rem 4rem 1.25rem 1.25rem;
+}
+
+/* Gym: rectángulo agresivo con esquina cercenada */
+.portal-frame[data-world="gym"],
+.portal-scene[data-world="gym"] {
+  clip-path: var(--portal-clip-gym);
+}
+
+/* Cyber: octógono biselado con glow que sigue la forma */
+.portal-frame[data-world="cyber"],
+.portal-scene[data-world="cyber"] {
+  clip-path: var(--portal-clip-cyber);
+}
+
+/* El glow de Cyber va en un wrapper porque clip-path recortaría el filtro */
+.portal-glow-cyber {
+  filter: drop-shadow(0 0 7px rgba(0, 229, 255, 0.4));
+}
+
+/* Capa de contenido (velo + textos) sobre la escena: mismo recorte */
+.portal-veil {
+  border-radius: inherit;
+}
+
+.portal-frame[data-world="gym"] .portal-veil {
+  clip-path: var(--portal-clip-gym);
+}
+
+.portal-frame[data-world="cyber"] .portal-veil {
+  clip-path: var(--portal-clip-cyber);
+}
+
+/* ── Escena base ─────────────────────────────────────────── */
+
+.portal-scene {
+  position: absolute;
+  inset: 0;
+  display: block;
+  overflow: hidden;
+  border-radius: inherit;
+  transition: filter 300ms ease;
+}
+
+/* Portales inactivos: mundo "apagado"; revive al hover/focus */
+.portal-frame[data-active="false"] .portal-scene {
+  filter: saturate(0.35) brightness(0.82);
+}
+
+button:hover .portal-frame[data-active="false"] .portal-scene,
+button:focus-visible .portal-frame[data-active="false"] .portal-scene,
+.portal-frame[data-active="false"]:hover .portal-scene {
+  filter: none;
+}
+
+/* ── Teyvat: cielo dorado con chispas ────────────────────── */
+
+.portal-scene[data-world="teyvat"] {
+  background: linear-gradient(
+    165deg,
+    #8fd0d8 0%,
+    #cfe9e2 32%,
+    #f4ecd4 62%,
+    #e9c883 100%
+  );
+  background-size: 160% 160%;
+  animation: ps-sky 9s ease-in-out infinite alternate;
+}
+
+/* Ornamento interior dorado */
+.portal-scene[data-world="teyvat"]::after {
+  content: "";
+  position: absolute;
+  inset: 2px;
+  border-radius: inherit;
+  box-shadow:
+    inset 0 0 0 1px rgba(201, 162, 39, 0.45),
+    inset 0 0 14px rgba(255, 255, 255, 0.45);
+  pointer-events: none;
+}
+
+@keyframes ps-sky {
+  from {
+    background-position: 0% 0%;
+  }
+  to {
+    background-position: 100% 100%;
+  }
+}
+
+.ps-spark {
+  position: absolute;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: radial-gradient(circle, #fff8e0 0%, #ffd766 55%, transparent 75%);
+  box-shadow: 0 0 8px 2px rgba(255, 215, 102, 0.65);
+  animation: ps-spark-float 4s ease-in-out infinite;
+}
+
+.ps-spark:nth-of-type(1) {
+  left: 22%;
+  top: 58%;
+}
+
+.ps-spark:nth-of-type(2) {
+  left: 55%;
+  top: 28%;
+  scale: 0.7;
+  animation-delay: -1.4s;
+}
+
+.ps-spark:nth-of-type(3) {
+  left: 78%;
+  top: 60%;
+  scale: 0.85;
+  animation-delay: -2.6s;
+}
+
+@keyframes ps-spark-float {
+  0%,
+  100% {
+    translate: 0 0;
+    opacity: 0.65;
+  }
+  50% {
+    translate: 0 -7px;
+    opacity: 1;
+  }
+}
+
+/* ── Gym: metal, franjas de peligro y tipografía masiva ──── */
+
+.portal-scene[data-world="gym"] {
+  background:
+    radial-gradient(120% 120% at 15% 0%, rgba(255, 255, 255, 0.14) 0%, transparent 40%),
+    linear-gradient(150deg, #26262b 0%, #121214 55%, #1b1b1f 100%);
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.12),
+    inset 5px 0 0 0 #ff3b30;
+}
+
+/* Franjas diagonales: paradas por defecto, en marcha al hover/activo.
+   Tile cuadrado con 4 bandas iguales (patrón "barber pole"): tesela
+   perfecto a 45° y, desplazando exactamente un tile por ciclo, el bucle
+   es continuo — sin saltos al reiniciar ni costuras entre tiles. */
+.portal-scene[data-world="gym"]::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: linear-gradient(
+    -45deg,
+    rgba(255, 59, 48, 0.3) 25%,
+    transparent 25% 50%,
+    rgba(255, 59, 48, 0.3) 50% 75%,
+    transparent 75%
+  );
+  background-size: 30px 30px;
+  opacity: 0.55;
+  animation: ps-stripes 1s linear infinite;
+  animation-play-state: paused;
+}
+
+button:hover .portal-scene[data-world="gym"]::before,
+button:focus-visible .portal-scene[data-world="gym"]::before,
+.portal-frame[data-active="true"] .portal-scene[data-world="gym"]::before {
+  animation-play-state: running;
+}
+
+@keyframes ps-stripes {
+  to {
+    /* Exactamente un tile en X = misma fase al reiniciar el ciclo */
+    background-position: 30px 0;
+  }
+}
+
+.ps-word {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-anton), sans-serif;
+  font-size: 1.5rem;
+  letter-spacing: 0.04em;
+  color: rgba(255, 255, 255, 0.16);
+  transform: rotate(-6deg);
+  user-select: none;
+}
+
+.portal-scene[data-size="preview"] .ps-word {
+  font-size: 3.25rem;
+}
+
+.portal-scene[data-size="card"] .ps-word {
+  font-size: 4.5rem;
+}
+
+/* ── Cyber: grid neón, scanline y acento magenta ─────────── */
+
+.portal-scene[data-world="cyber"] {
+  background: radial-gradient(120% 90% at 50% 20%, #0b1a30 0%, #050a14 70%);
+  box-shadow:
+    inset 0 0 0 1px rgba(0, 229, 255, 0.4),
+    inset 0 0 18px rgba(0, 229, 255, 0.16);
+}
+
+.portal-scene[data-world="cyber"]::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image:
+    repeating-linear-gradient(
+      0deg,
+      rgba(0, 229, 255, 0.22) 0 1px,
+      transparent 1px 9px
+    ),
+    repeating-linear-gradient(
+      90deg,
+      rgba(0, 229, 255, 0.22) 0 1px,
+      transparent 1px 9px
+    );
+  animation: ps-grid 5s linear infinite;
+}
+
+@keyframes ps-grid {
+  to {
+    background-position:
+      9px 9px,
+      9px 9px;
+  }
+}
+
+/* Triángulo magenta de esquina */
+.portal-scene[data-world="cyber"]::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  border-style: solid;
+  border-width: 0 12px 12px 0;
+  border-color: transparent rgba(255, 46, 196, 0.85) transparent transparent;
+}
+
+.ps-scan {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: -40%;
+  height: 36%;
+  background: linear-gradient(
+    to bottom,
+    transparent,
+    rgba(0, 229, 255, 0.3) 50%,
+    transparent
+  );
+  animation: ps-scan 2.8s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes ps-scan {
+  from {
+    top: -40%;
+  }
+  to {
+    top: 110%;
+  }
+}
+
+/* ── Estado activo: el mundo "encendido" ─────────────────── */
+
+.portal-frame[data-active="true"][data-world="teyvat"] {
+  animation: portal-aura-teyvat 2.6s ease-in-out infinite;
+}
+
+@keyframes portal-aura-teyvat {
+  0%,
+  100% {
+    box-shadow:
+      0 0 0 1px rgba(201, 162, 39, 0.8),
+      0 0 14px 2px rgba(201, 162, 39, 0.4);
+  }
+  50% {
+    box-shadow:
+      0 0 0 1px rgba(201, 162, 39, 1),
+      0 0 24px 5px rgba(201, 162, 39, 0.6);
+  }
+}
+
+.portal-frame[data-active="true"] .portal-scene[data-world="gym"] {
+  box-shadow:
+    inset 0 0 0 2px #ff3b30,
+    inset 5px 0 0 0 #ff3b30;
+}
+
+.portal-glow-cyber:has(.portal-frame[data-active="true"]) {
+  animation: portal-aura-cyber 2.2s ease-in-out infinite;
+}
+
+@keyframes portal-aura-cyber {
+  0%,
+  100% {
+    filter: drop-shadow(0 0 6px rgba(0, 229, 255, 0.45));
+  }
+  50% {
+    filter: drop-shadow(0 0 14px rgba(0, 229, 255, 0.8));
+  }
+}

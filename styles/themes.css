@@ -1,0 +1,156 @@
+/* ============================================================
+   Tokens por tema — seleccionados con [data-theme] en <html>.
+   Mismos nombres de token en los 3 mundos; solo cambian los valores.
+   :root replica Teyvat (default) para que nada quede sin estilo
+   antes de que el script anti-flash aplique el tema guardado.
+   ============================================================ */
+
+/* ── Teyvat — aventura, cielos, magia elemental (default) ── */
+:root,
+[data-theme="teyvat"] {
+  color-scheme: light;
+
+  /* Superficies */
+  --bg: #f6f1e4;
+  --bg-soft: #ecf2ef;
+  --surface: rgba(255, 253, 246, 0.72);
+  --surface-solid: #fffdf6;
+  --border: rgba(160, 132, 60, 0.28);
+
+  /* Texto */
+  --text: #2b2a33;
+  --text-muted: #6b6878;
+  /* Oscuro sobre oro: crema sobre oro daba contraste ~1.9 (ilegible
+     bajo el shimmer del botón y flojo en reposo) */
+  --text-on-primary: #332a10;
+
+  /* Acentos */
+  --primary: #c9a227;
+  --primary-strong: #a8841a;
+  --secondary: #3aa6a0;
+  --accent: #8b7bd8;
+  --glow: rgba(201, 162, 39, 0.45);
+  /* Acento apto para TEXTO sobre --bg/--surface (contraste AA): el oro
+     --primary solo da ~2.1:1 sobre el crema; este oro oscuro da ~4.9:1.
+     Usar --accent-ink para texto/hover, --primary para superficies. */
+  --accent-ink: #7d6210;
+
+  /* Fondo de escena (cielo con gradiente suave) */
+  --scene: linear-gradient(
+    180deg,
+    #dff0f2 0%,
+    #f6f1e4 45%,
+    #f3e7cf 100%
+  );
+
+  /* Forma y profundidad: etéreo, redondeado, glassmorphism */
+  --radius-sm: 0.5rem;
+  --radius-md: 1rem;
+  --radius-lg: 1.75rem;
+  --shadow-card: 0 8px 32px rgba(96, 76, 22, 0.12);
+  --shadow-glow: 0 0 24px var(--glow);
+
+  /* Tipografía */
+  --font-display: var(--font-cinzel);
+  --font-sub: var(--font-cormorant);
+  --font-body: var(--font-manrope);
+  --font-mono: var(--font-space-mono);
+  --tracking-display: 0.02em;
+  --display-transform: none;
+
+  /* Movimiento: flotante, suave */
+  --ease-theme: cubic-bezier(0.22, 1, 0.36, 1);
+  --dur-fast: 250ms;
+  --dur-base: 600ms;
+  --dur-slow: 1100ms;
+}
+
+/* ── Gym — raw / power, alto contraste ───────────────────── */
+[data-theme="gym"] {
+  color-scheme: dark;
+
+  --bg: #0d0d0f;
+  --bg-soft: #161618;
+  --surface: #1b1b1f;
+  --surface-solid: #1b1b1f;
+  --border: rgba(255, 255, 255, 0.14);
+
+  --text: #f4f4f5;
+  --text-muted: #9d9da6;
+  --text-on-primary: #0d0d0f;
+
+  --primary: #ff3b30;
+  --primary-strong: #d92a20;
+  --secondary: #ff9500;
+  --accent: #ffd60a;
+  --glow: rgba(255, 59, 48, 0.5);
+  /* El rojo ya pasa AA sobre el negro (~5.5:1): misma tinta que --primary */
+  --accent-ink: var(--primary);
+
+  --scene: linear-gradient(180deg, #101012 0%, #0d0d0f 60%, #141416 100%);
+
+  /* Forma: brutal, sin curvas */
+  --radius-sm: 0;
+  --radius-md: 0.125rem;
+  --radius-lg: 0.25rem;
+  --shadow-card: 0 10px 40px rgba(0, 0, 0, 0.6);
+  --shadow-glow: 0 0 32px var(--glow);
+
+  --font-display: var(--font-anton);
+  --font-sub: var(--font-oswald);
+  --font-body: var(--font-inter);
+  --font-mono: var(--font-space-mono);
+  --tracking-display: 0.01em;
+  --display-transform: uppercase;
+
+  /* Movimiento: brusco, rápido, slam */
+  --ease-theme: cubic-bezier(0.85, 0, 0.15, 1);
+  --dur-fast: 120ms;
+  --dur-base: 320ms;
+  --dur-slow: 550ms;
+}
+
+/* ── Cyber — HUD, neón, precisión ────────────────────────── */
+[data-theme="cyber"] {
+  color-scheme: dark;
+
+  --bg: #050a14;
+  --bg-soft: #0a1220;
+  --surface: rgba(13, 22, 38, 0.85);
+  --surface-solid: #0d1626;
+  --border: rgba(0, 229, 255, 0.28);
+
+  --text: #dff4ff;
+  --text-muted: #7d93ad;
+  --text-on-primary: #041018;
+
+  --primary: #00e5ff;
+  --primary-strong: #00b8d4;
+  --secondary: #ff2ec4;
+  --accent: #9d7bff;
+  --glow: rgba(0, 229, 255, 0.45);
+  /* El cyan ya pasa AA sobre el azul noche (~12.9:1): misma tinta */
+  --accent-ink: var(--primary);
+
+  --scene: linear-gradient(180deg, #060d1a 0%, #050a14 55%, #08101f 100%);
+
+  /* Forma: precisa, cantos casi rectos con glow */
+  --radius-sm: 0.125rem;
+  --radius-md: 0.375rem;
+  --radius-lg: 0.625rem;
+  --shadow-card: 0 8px 40px rgba(0, 0, 0, 0.7), 0 0 0 1px var(--border);
+  --shadow-glow: 0 0 20px var(--glow);
+
+  --font-display: var(--font-orbitron);
+  --font-sub: var(--font-space-mono);
+  --font-body: var(--font-rajdhani);
+  --font-mono: var(--font-space-mono);
+  --tracking-display: 0.08em;
+  --display-transform: uppercase;
+
+  /* Movimiento: mecánico, ensamblado */
+  --ease-theme: cubic-bezier(0.16, 1, 0.3, 1);
+  --dur-fast: 150ms;
+  --dur-base: 450ms;
+  --dur-slow: 800ms;
+}

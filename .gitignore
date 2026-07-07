@@ -39,3 +39,13 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# instrucciones de agentes IA (contexto local, no va al repo)
+CLAUDE.md
+AGENTS.md
+.claude/
+
+# secretos y credenciales adicionales (por si aparecen con otro nombre)
+*.key
+*.secret
+secrets.*
