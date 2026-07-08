@@ -43,12 +43,25 @@
 
 html {
   /* Fallback nativo (reduced-motion / sin JS); con Lenis activo lo
-     desactiva .lenis-smooth para no suavizar dos veces. */
+     desactiva .lenis-smooth para no suavizar dos veces. En touch Lenis
+     no se inicializa (SmoothScroll.tsx) y este smooth es el que
+     resuelve los anchors del navbar. */
   scroll-behavior: smooth;
   /* Reserva el hueco del scrollbar aunque desaparezca (viaje de tema y
      menú móvil bloquean el scroll con overflow: hidden): sin esto, el
      contenido saltaba ~15px al quitarse/reponerse la barra. */
   scrollbar-gutter: stable;
+  /* Segundo candado contra el scroll horizontal (§8): el clip de body
+     no alcanza a los fixed (navbar, overlays) ni, según navegador, a
+     los estados pre-reveal transformados — en móvil se colaban unos
+     píxeles de pan lateral. */
+  overflow-x: clip;
+}
+
+/* El feedback táctil propio (:active en projects.css/buttons.css)
+   sustituye al flash gris del sistema en móvil. */
+* {
+  -webkit-tap-highlight-color: transparent;
 }
 
 /* Foco por teclado visible y temático en todos los interactivos.
@@ -84,7 +97,9 @@ body {
   font-family: var(--font-body);
   /* Innegociable: nada de scroll horizontal accidental (CLAUDE.md §8). */
   overflow-x: clip;
-  min-height: 100dvh;
+  /* svh, no dvh: dvh cambia al ocultarse la barra del navegador móvil y
+     cada cambio desplazaba el layout a mitad de scroll (tirones). */
+  min-height: 100svh;
   transition:
     background-color var(--dur-base) var(--ease-theme),
     color var(--dur-base) var(--ease-theme);

@@ -64,16 +64,20 @@
   transition: background-position 0.7s ease;
 }
 
-[data-theme="teyvat"] .btn:hover {
-  transform: translateY(-2px);
-  box-shadow:
-    0 0 0 1px rgba(255, 245, 215, 0.9),
-    0 0 30px var(--glow),
-    inset 0 1px 0 rgba(255, 255, 255, 0.6);
-}
+/* Hovers tras (hover: hover): en touch un tap dejaba el estado hover
+   "pegado" (sin mouseleave que lo apague); el feedback táctil es :active. */
+@media (hover: hover) {
+  [data-theme="teyvat"] .btn:hover {
+    transform: translateY(-2px);
+    box-shadow:
+      0 0 0 1px rgba(255, 245, 215, 0.9),
+      0 0 30px var(--glow),
+      inset 0 1px 0 rgba(255, 255, 255, 0.6);
+  }
 
-[data-theme="teyvat"] .btn:hover::before {
-  background-position: -80% 0;
+  [data-theme="teyvat"] .btn:hover::before {
+    background-position: -80% 0;
+  }
 }
 
 [data-theme="teyvat"] .btn:active {
@@ -108,15 +112,17 @@
   opacity: 0;
 }
 
-[data-theme="gym"] .btn:hover {
-  /* se hunde hacia la sombra: press */
-  transform: translate(3px, 3px);
-  filter: drop-shadow(2px 2px 0 rgba(0, 0, 0, 0.65));
-  background: var(--primary-strong);
-}
+@media (hover: hover) {
+  [data-theme="gym"] .btn:hover {
+    /* se hunde hacia la sombra: press */
+    transform: translate(3px, 3px);
+    filter: drop-shadow(2px 2px 0 rgba(0, 0, 0, 0.65));
+    background: var(--primary-strong);
+  }
 
-[data-theme="gym"] .btn:hover::before {
-  animation: btn-impact 0.28s ease-out 1;
+  [data-theme="gym"] .btn:hover::before {
+    animation: btn-impact 0.28s ease-out 1;
+  }
 }
 
 [data-theme="gym"] .btn:active {
@@ -174,29 +180,31 @@
 }
 
 /* Hover: glow pulsante + scanline vertical mientras dura */
-[data-theme="cyber"] .btn:hover {
-  background-color: rgba(0, 229, 255, 0.14);
-  background-image: linear-gradient(
-    to bottom,
-    transparent 0 44%,
-    rgba(0, 229, 255, 0.22) 48% 52%,
-    transparent 56%
-  );
-  background-size: 100% 300%;
-  background-repeat: no-repeat;
-  animation:
-    btn-hud-pulse 1.2s ease-in-out infinite,
-    btn-hud-scan 1.2s linear infinite;
-}
+@media (hover: hover) {
+  [data-theme="cyber"] .btn:hover {
+    background-color: rgba(0, 229, 255, 0.14);
+    background-image: linear-gradient(
+      to bottom,
+      transparent 0 44%,
+      rgba(0, 229, 255, 0.22) 48% 52%,
+      transparent 56%
+    );
+    background-size: 100% 300%;
+    background-repeat: no-repeat;
+    animation:
+      btn-hud-pulse 1.2s ease-in-out infinite,
+      btn-hud-scan 1.2s linear infinite;
+  }
 
-[data-theme="cyber"] .btn:hover::before {
-  transform: translateX(-4px);
-  opacity: 1;
-}
+  [data-theme="cyber"] .btn:hover::before {
+    transform: translateX(-4px);
+    opacity: 1;
+  }
 
-[data-theme="cyber"] .btn:hover::after {
-  transform: translateX(4px);
-  opacity: 1;
+  [data-theme="cyber"] .btn:hover::after {
+    transform: translateX(4px);
+    opacity: 1;
+  }
 }
 
 [data-theme="cyber"] .btn:active {

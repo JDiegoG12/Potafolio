@@ -17,6 +17,11 @@ import { useTheme } from "@/lib/hooks/useTheme";
  * - El overlay del menú móvil escapa del secuestro de rueda con
  *   `data-lenis-prevent` (scroll interno propio).
  * - Con prefers-reduced-motion NO se inicializa: scroll 100% nativo.
+ * - En dispositivos touch (pointer: coarse) TAMPOCO: Lenis no suaviza
+ *   el gesto táctil (syncTouch off) pero su rAF sincroniza contra el
+ *   scroll nativo y peleaba con la inercia del navegador — tirones
+ *   medidos en móvil. Sin la clase .lenis-smooth, los anchors los
+ *   resuelve el scroll-behavior: smooth nativo + scroll-mt-20.
  *
  * La clase `lenis-smooth` en <html> desactiva el `scroll-behavior:
  * smooth` CSS (globals.css) para no suavizar dos veces.
@@ -27,6 +32,9 @@ export function SmoothScroll() {
 
   useEffect(() => {
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    // Puntero primario grueso = móvil/tablet táctil. Los híbridos con
+    // pantalla táctil y ratón (pointer: fine) conservan Lenis.
+    if (window.matchMedia("(pointer: coarse)").matches) return;
 
     const lenis = new Lenis({
       // -80px = altura del navbar (64) + respiro, igual que scroll-mt-20.

@@ -4,6 +4,7 @@ import { Preloader } from "@/components/effects/Preloader";
 import { SmoothScroll } from "@/components/effects/SmoothScroll";
 import { ThemeBackground } from "@/components/effects/ThemeBackground";
 import { ThemeTransition } from "@/components/effects/ThemeTransition";
+import { TouchFeedback } from "@/components/effects/TouchFeedback";
 import { MuteToggle } from "@/components/layout/MuteToggle";
 import { Navbar } from "@/components/layout/Navbar";
 import { SkipLink } from "@/components/layout/SkipLink";
@@ -76,6 +77,7 @@ export default function RootLayout({
               <ThemeTransition />
               <CustomCursor />
               <SmoothScroll />
+              <TouchFeedback />
               <ThemeBackground />
               <Navbar />
               {children}

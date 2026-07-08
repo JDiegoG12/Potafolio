@@ -79,6 +79,19 @@
   }
 }
 
+/* Touch: eco del hover mientras dura el toque (el tap-highlight del
+   sistema está desactivado en globals.css) */
+@media (hover: none) {
+  .cert-row:active {
+    background: color-mix(in srgb, var(--primary) 9%, transparent);
+  }
+
+  .cert-row:active .cert-type-icon,
+  .cert-row:active .cert-action {
+    color: var(--accent-ink);
+  }
+}
+
 .cert-row:hover .cert-type-icon,
 .cert-row:focus-visible .cert-type-icon,
 .cert-row:hover .cert-action,

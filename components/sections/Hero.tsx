@@ -13,7 +13,10 @@ export function Hero() {
   const { t } = useTranslation();
 
   return (
-    <section className="flex min-h-dvh flex-col items-center justify-center gap-6 text-center">
+    // min-h-svh (no dvh): dvh crece al ocultarse la barra del navegador
+    // móvil y el hero empujaba todo el contenido hacia abajo a mitad de
+    // scroll — los "tirones" entre secciones. svh es estable.
+    <section className="flex min-h-svh flex-col items-center justify-center gap-6 text-center">
       <p className="font-sub text-lg tracking-[0.3em] text-text-muted uppercase">
         {t("hero.kicker")}
       </p>

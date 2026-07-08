@@ -55,6 +55,34 @@
   }
 }
 
+/* ── Touch: la card responde al tacto ─────────────────────────
+   Sin hover, el press reproduce la reacción de la card (elevación
+   + glow + gesto del emblema + onda del piano) mientras dura el
+   toque, con transición corta para que se sienta inmediata. En
+   iOS, :active sobre <article> necesita el listener touchstart
+   global (TouchFeedback.tsx). */
+@media (hover: none) {
+  .project-card:active {
+    transform: translateY(-2px) scale(0.995);
+    box-shadow: var(--shadow-glow);
+    transition-duration: var(--dur-fast);
+  }
+
+  .project-card:active .project-emblem svg {
+    transform: scale(1.12) rotate(-12deg);
+  }
+
+  .keys-card:active .piano-key {
+    animation: piano-dip 1.5s ease-in-out infinite;
+    animation-delay: calc(var(--i) * 70ms);
+  }
+
+  .repo-link:active {
+    color: var(--accent-ink);
+    border-color: var(--accent-ink);
+  }
+}
+
 /* Chip de tecnología del stack */
 .stack-chip {
   display: inline-block;
@@ -75,6 +103,21 @@
 .btn-sm {
   padding: 0.55rem 1.35rem;
   font-size: 0.92rem;
+}
+
+/* Móvil (<sm): en la fila de acciones de las cards, el CTA (demo o
+   repo promovido) ocupa su propia fila a ancho completo — mejor área
+   de toque y sin wraps ambiguos: los repos secundarios de KOB quedaban
+   partidos en dos filas desalineadas. .btn ya centra su contenido
+   (justify-content), y el wrapper .btn-glow también debe estirarse. */
+@media (width < 40rem) {
+  .project-links .btn-glow {
+    width: 100%;
+  }
+
+  .project-links .btn {
+    width: 100%;
+  }
 }
 
 /* Cyber es la variante más ANCHA (brackets [ ] + mono/wide): sin este

@@ -84,7 +84,10 @@ export function ProjectLinks({ project }: { project: Project }) {
   return (
     // gap-x-4 (no 5): la variante cyber del botón es la más ancha y con
     // el gap grande no cabía junto al repo-link en las cards estrechas.
-    <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
+    // Móvil (<sm): el CTA ocupa su fila completa (.project-links en
+    // projects.css) y los repos —agrupados para que nunca se partan en
+    // filas desalineadas, como pasaba en KOB— van centrados debajo.
+    <div className="project-links flex flex-wrap items-center gap-x-4 gap-y-2.5 max-sm:justify-center">
       {hasDemo && project.demoUrl && (
         <ThemedButton
           href={project.demoUrl}
@@ -107,19 +110,23 @@ export function ProjectLinks({ project }: { project: Project }) {
           {t(primaryRepo.labelKey)}
         </ThemedButton>
       )}
-      {secondaryRepos.map((repo) => (
-        <a
-          key={repo.url}
-          href={repo.url}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="repo-link"
-          data-cursor-hover
-        >
-          <GitHubIcon size={15} />
-          {t(repo.labelKey)}
-        </a>
-      ))}
+      {secondaryRepos.length > 0 && (
+        <span className="flex items-center gap-x-4">
+          {secondaryRepos.map((repo) => (
+            <a
+              key={repo.url}
+              href={repo.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="repo-link"
+              data-cursor-hover
+            >
+              <GitHubIcon size={15} />
+              {t(repo.labelKey)}
+            </a>
+          ))}
+        </span>
+      )}
     </div>
   );
 }
