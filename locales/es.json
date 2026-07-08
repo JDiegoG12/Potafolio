@@ -4,6 +4,7 @@
     "about": "Sobre mí",
     "projects": "Proyectos",
     "contact": "Contacto",
+    "arcade": "Arcade",
     "worlds": "Elige tu mundo",
     "openMenu": "Abrir menú",
     "closeMenu": "Cerrar menú",
@@ -35,7 +36,29 @@
     "certs": "Certificaciones",
     "projects": "Proyectos destacados",
     "chill": "Proyectos chill",
-    "contact": "Contacto"
+    "contact": "Contacto",
+    "arcade": "Sala de juegos"
+  },
+  "arcade": {
+    "pitch": "Un respiro antes de irte: cada mundo esconde su propio minijuego.",
+    "play": "Jugar",
+    "again": "Otra ronda",
+    "best": "Récord",
+    "over": "¡Tiempo!",
+    "record": "¡Nuevo récord!",
+    "target": "Objetivo",
+    "teyvat": {
+      "name": "Caza de chispas",
+      "hint": "Atrapa las chispas doradas antes de que se apaguen. 30 segundos."
+    },
+    "gym": {
+      "name": "Ráfaga de reps",
+      "hint": "Golpea los discos antes de que caigan. 30 segundos. Sin piedad."
+    },
+    "cyber": {
+      "name": "PROTOCOLO: BRECHA",
+      "hint": "Intercepta los nodos antes de que el rastreo los cierre. 30 segundos."
+    }
   },
   "certs": {
     "view": "Ver certificado",

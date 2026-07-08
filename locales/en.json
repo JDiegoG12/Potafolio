@@ -4,6 +4,7 @@
     "about": "About",
     "projects": "Projects",
     "contact": "Contact",
+    "arcade": "Arcade",
     "worlds": "Choose your world",
     "openMenu": "Open menu",
     "closeMenu": "Close menu",
@@ -35,7 +36,29 @@
     "certs": "Certifications",
     "projects": "Featured projects",
     "chill": "Chill projects",
-    "contact": "Contact"
+    "contact": "Contact",
+    "arcade": "Game room"
+  },
+  "arcade": {
+    "pitch": "One last stop before you go: every world hides its own minigame.",
+    "play": "Play",
+    "again": "Play again",
+    "best": "Best",
+    "over": "Time's up!",
+    "record": "New record!",
+    "target": "Target",
+    "teyvat": {
+      "name": "Spark hunt",
+      "hint": "Catch the golden sparks before they fade away. 30 seconds."
+    },
+    "gym": {
+      "name": "Rep rush",
+      "hint": "Smash the plates before they drop. 30 seconds. No mercy."
+    },
+    "cyber": {
+      "name": "PROTOCOL: BREACH",
+      "hint": "Intercept the nodes before the trace shuts them down. 30 seconds."
+    }
   },
   "certs": {
     "view": "View certificate",

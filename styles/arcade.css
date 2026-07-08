@@ -1,0 +1,395 @@
+/* ============================================================
+   Arcade (sección minijuego): una sola mecánica —tocar objetivos
+   antes de que expiren— y tres skins completas por mundo. Como
+   el resto de firmas, todo lee los tokens del tema activo y las
+   piezas propias de cada mundo se seleccionan por [data-theme].
+
+   Reduced-motion: el kill-switch global congela pops/bursts; la
+   animación de decaimiento del objetivo (su "reloj" visual) se
+   desactiva explícitamente abajo para que el objetivo se vea
+   entero hasta expirar — el juego sigue siendo jugable.
+   ============================================================ */
+
+/* ── Escenario ────────────────────────────────────────────── */
+
+.arcade-stage {
+  position: relative;
+  overflow: hidden;
+  height: min(62vh, 26rem);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-card);
+  /* Juego táctil: sin double-tap-zoom ni selección accidental */
+  touch-action: manipulation;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+[data-theme="teyvat"] .arcade-stage {
+  background:
+    radial-gradient(
+      120% 90% at 50% 0%,
+      rgba(201, 162, 39, 0.14),
+      transparent 60%
+    ),
+    linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--surface-solid) 86%, #8fd0d8),
+      var(--surface-solid)
+    );
+  box-shadow:
+    var(--shadow-card),
+    inset 0 0 0 1px rgba(201, 162, 39, 0.25),
+    inset 0 0 30px rgba(255, 255, 255, 0.25);
+}
+
+[data-theme="gym"] .arcade-stage {
+  background:
+    repeating-linear-gradient(
+      -45deg,
+      rgba(255, 255, 255, 0.022) 0 2px,
+      transparent 2px 18px
+    ),
+    radial-gradient(ellipse at 50% 130%, rgba(0, 0, 0, 0.5), transparent 60%),
+    var(--surface-solid);
+  box-shadow:
+    var(--shadow-card),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.08);
+}
+
+[data-theme="cyber"] .arcade-stage {
+  background:
+    linear-gradient(rgba(56, 214, 255, 0.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(56, 214, 255, 0.06) 1px, transparent 1px),
+    radial-gradient(120% 90% at 50% 20%, #0b1a30 0%, #050a14 70%);
+  background-size:
+    34px 34px,
+    34px 34px,
+    100% 100%;
+  box-shadow:
+    var(--shadow-card),
+    inset 0 0 0 1px rgba(0, 229, 255, 0.3),
+    inset 0 0 26px rgba(0, 229, 255, 0.1);
+}
+
+/* Impacto Gym: el escenario acusa cada golpe */
+.arcade-shake {
+  animation: arcade-shake 0.18s linear;
+}
+
+@keyframes arcade-shake {
+  25% {
+    transform: translate(3px, -2px);
+  }
+  50% {
+    transform: translate(-3px, 2px);
+  }
+  75% {
+    transform: translate(2px, 1px);
+  }
+}
+
+/* ── HUD (puntos + barra de tiempo + récord) ──────────────── */
+
+.arcade-hud {
+  position: absolute;
+  inset-inline: 0;
+  top: 0;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.85rem 1.1rem;
+  pointer-events: none;
+}
+
+.arcade-score {
+  min-width: 2ch;
+  font-family: var(--font-display);
+  font-size: 1.7rem;
+  line-height: 1;
+  color: var(--text);
+}
+
+.arcade-timebar {
+  flex: 1;
+  height: 6px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--border) 55%, transparent);
+}
+
+.arcade-timebar i {
+  display: block;
+  height: 100%;
+  background: var(--primary);
+  box-shadow: 0 0 10px var(--glow);
+  transition: width 100ms linear;
+}
+
+/* Gym: barra señalética recta, sin curvas */
+[data-theme="gym"] .arcade-timebar,
+[data-theme="gym"] .arcade-timebar i {
+  border-radius: 0;
+}
+
+.arcade-hud-best {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.06em;
+  color: var(--text-muted);
+  text-transform: uppercase;
+}
+
+/* ── Objetivos ────────────────────────────────────────────── */
+
+/* El botón lleva posición + decaimiento (su vida es el reloj visual);
+   la skin interior lleva el pop de entrada y el aspecto por mundo.
+   Separados porque dos animaciones sobre `scale` en el mismo elemento
+   se pisan (la última gana y mataría el pop). */
+.arcade-target {
+  position: absolute;
+  z-index: 1;
+  width: 3.4rem;
+  height: 3.4rem;
+  padding: 0;
+  border: 0;
+  background: none;
+  translate: -50% -50%;
+  cursor: pointer;
+  animation: arcade-decay var(--arcade-life, 1400ms) linear forwards;
+}
+
+.arcade-target-skin {
+  display: block;
+  width: 100%;
+  height: 100%;
+  animation: arcade-pop 0.18s var(--ease-theme);
+}
+
+@keyframes arcade-pop {
+  from {
+    scale: 0.2;
+    opacity: 0;
+  }
+}
+
+/* El objetivo "se apaga": encoge y pierde luz hasta expirar */
+@keyframes arcade-decay {
+  0%,
+  30% {
+    opacity: 1;
+    scale: 1;
+  }
+  100% {
+    opacity: 0.15;
+    scale: 0.5;
+  }
+}
+
+/* Reduced-motion: sin reloj visual — el objetivo se ve entero toda su
+   vida y desaparece al expirar. Gana al kill-switch global (que
+   colapsaría el `forwards` al estado final: objetivos fantasma). */
+@media (prefers-reduced-motion: reduce) {
+  .arcade-target {
+    animation: none !important;
+  }
+}
+
+/* Teyvat: chispa dorada con halo */
+[data-theme="teyvat"] .arcade-target-skin {
+  border-radius: 50%;
+  background: radial-gradient(
+    circle at 38% 32%,
+    #fff8e0 0%,
+    #ffd766 42%,
+    rgba(232, 197, 100, 0.35) 68%,
+    transparent 76%
+  );
+  box-shadow: 0 0 18px 5px rgba(255, 215, 102, 0.5);
+}
+
+/* Gym: disco de pesas con anillo del acento */
+[data-theme="gym"] .arcade-target-skin {
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    #303036 0 24%,
+    var(--primary) 26% 35%,
+    #1b1b1f 37% 58%,
+    #3a3a41 60% 70%,
+    #17171a 72%
+  );
+  box-shadow:
+    inset 0 0 0 2px rgba(255, 255, 255, 0.14),
+    0 4px 0 rgba(0, 0, 0, 0.55);
+}
+
+/* Cyber: nodo octogonal neón (el glow va en el botón: el clip-path
+   de la skin recortaría un box-shadow exterior) */
+[data-theme="cyber"] .arcade-target {
+  filter: drop-shadow(0 0 6px var(--glow));
+}
+
+[data-theme="cyber"] .arcade-target-skin {
+  position: relative;
+  clip-path: polygon(
+    30% 0,
+    70% 0,
+    100% 30%,
+    100% 70%,
+    70% 100%,
+    30% 100%,
+    0 70%,
+    0 30%
+  );
+  background: rgba(0, 229, 255, 0.1);
+  box-shadow:
+    inset 0 0 0 2px var(--primary),
+    inset 0 0 14px rgba(0, 229, 255, 0.4);
+}
+
+[data-theme="cyber"] .arcade-target-skin::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 10px;
+  height: 10px;
+  translate: -50% -50%;
+  background: var(--primary);
+  box-shadow: 0 0 10px var(--glow);
+}
+
+/* ── Burst al acertar ─────────────────────────────────────── */
+
+.arcade-burst {
+  position: absolute;
+  z-index: 1;
+  width: 3.4rem;
+  height: 3.4rem;
+  translate: -50% -50%;
+  pointer-events: none;
+}
+
+.arcade-burst::before,
+.arcade-burst::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+}
+
+/* Teyvat: anillo dorado que se expande + destello que se disipa */
+[data-theme="teyvat"] .arcade-burst::before {
+  border: 2px solid rgba(255, 215, 102, 0.9);
+  border-radius: 50%;
+  animation: arcade-ring 0.45s ease-out forwards;
+}
+
+[data-theme="teyvat"] .arcade-burst::after {
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 248, 224, 0.9), transparent 65%);
+  animation: arcade-flash 0.3s ease-out forwards;
+}
+
+/* Gym: flash seco + líneas de impacto diagonales */
+[data-theme="gym"] .arcade-burst::before {
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    color-mix(in srgb, var(--primary) 75%, white),
+    transparent 60%
+  );
+  animation: arcade-flash 0.22s ease-out forwards;
+}
+
+[data-theme="gym"] .arcade-burst::after {
+  background:
+    linear-gradient(45deg, transparent 46%, #fff 48% 52%, transparent 54%),
+    linear-gradient(-45deg, transparent 46%, #fff 48% 52%, transparent 54%);
+  animation: arcade-ring 0.3s ease-out forwards;
+}
+
+/* Cyber: doble marco RGB desalineado que glitchea al cerrarse */
+[data-theme="cyber"] .arcade-burst::before {
+  border: 2px solid var(--primary);
+  translate: -3px -2px;
+  animation: arcade-glitch-burst 0.35s step-end forwards;
+}
+
+[data-theme="cyber"] .arcade-burst::after {
+  border: 2px solid var(--secondary);
+  translate: 3px 2px;
+  animation: arcade-glitch-burst 0.35s step-end 0.05s forwards;
+}
+
+@keyframes arcade-ring {
+  from {
+    scale: 0.5;
+    opacity: 1;
+  }
+  to {
+    scale: 1.9;
+    opacity: 0;
+  }
+}
+
+@keyframes arcade-flash {
+  from {
+    scale: 0.8;
+    opacity: 1;
+  }
+  to {
+    scale: 1.5;
+    opacity: 0;
+  }
+}
+
+@keyframes arcade-glitch-burst {
+  0% {
+    opacity: 1;
+    scale: 1;
+  }
+  40% {
+    scale: 1.25;
+    translate: 2px -3px;
+  }
+  70% {
+    scale: 1.4;
+    translate: -3px 2px;
+    opacity: 0.6;
+  }
+  100% {
+    scale: 1.5;
+    opacity: 0;
+  }
+}
+
+/* ── Overlay (portada / resultado) ────────────────────────── */
+
+.arcade-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1.1rem;
+  padding: 1.5rem;
+  text-align: center;
+}
+
+.arcade-name {
+  font-family: var(--font-display);
+  letter-spacing: var(--tracking-display);
+  text-transform: var(--display-transform);
+}
+
+.arcade-final {
+  font-family: var(--font-display);
+  font-size: 3.4rem;
+  line-height: 1;
+  color: var(--accent-ink);
+  text-shadow: 0 0 24px var(--glow);
+}
