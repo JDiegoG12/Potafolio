@@ -21,7 +21,7 @@
     "active": "Mundo activo",
     "switchTo": "Viajar a {{world}}",
     "teyvat": { "tagline": "Cielos abiertos y magia elemental" },
-    "gym": { "tagline": "Hierro, sudor y disciplina" },
+    "gym": { "tagline": "Fuerza y disciplina" },
     "cyber": { "tagline": "Neón, HUD y precisión" }
   },
   "hero": {
@@ -32,9 +32,16 @@
   },
   "sections": {
     "about": "Sobre mí",
+    "certs": "Certificaciones",
     "projects": "Proyectos destacados",
     "chill": "Proyectos chill",
     "contact": "Contacto"
+  },
+  "certs": {
+    "view": "Ver certificado",
+    "verify": "Verificar",
+    "count_one": "{{count}} certificación",
+    "count_other": "{{count}} certificaciones"
   },
   "about": {
     "bioShort": "[BIO_CORTA]",

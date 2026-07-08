@@ -1,0 +1,108 @@
+/* ============================================================
+   Certificaciones (CLAUDE.md §7.5): UN panel único a todo el
+   ancho con dos columnas internas por emisor (Cisco | NVIDIA),
+   divididas por un hairline — así la asimetría 3 vs 5 no se lee
+   como dos cajas de distinto tamaño. Deliberadamente más quieta
+   que las cards de proyectos — el carácter por mundo lo ponen
+   los tokens (radios, bordes, sombras, fuentes) y un hover sutil
+   por fila; solo un toque explícito por tema al final.
+   ============================================================ */
+
+/* Separador entre columnas de emisor: horizontal en móvil (apiladas),
+   vertical en ≥768px (md, dos columnas). Usa --border, que ya es el
+   hairline temático (dorado en Teyvat, blanco seco en Gym, cyan con
+   glow visual en Cyber). */
+.cert-col + .cert-col {
+  border-top: 1px solid var(--border);
+}
+
+@media (min-width: 768px) {
+  .cert-col + .cert-col {
+    border-top: 0;
+    border-left: 1px solid var(--border);
+  }
+}
+
+.cert-list {
+  display: flex;
+  flex-direction: column;
+  padding: 0.35rem 0.55rem 0.55rem;
+  border-top: 1px solid var(--border);
+}
+
+/* Fila 100% clicable. Altura de toque ≥44px (a11y móvil); el foco por
+   teclado lo pinta el :focus-visible global (outline temático). */
+.cert-row {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  min-height: 2.75rem;
+  padding: 0.6rem 0.7rem;
+  border-radius: var(--radius-md);
+  text-decoration: none;
+  transition:
+    background-color var(--dur-fast) var(--ease-theme),
+    translate var(--dur-fast) var(--ease-theme);
+}
+
+.cert-row + .cert-row,
+.cert-list li + li .cert-row {
+  /* separador hairline entre filas, sin tocar la primera */
+  border-top: 1px solid color-mix(in srgb, var(--border) 55%, transparent);
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+}
+
+.cert-type-icon {
+  flex: none;
+  color: var(--text-muted);
+  transition: color var(--dur-fast) var(--ease-theme);
+}
+
+/* Etiqueta de acción (texto solo ≥sm; icono siempre) */
+.cert-action {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  gap: 0.4rem;
+  font-family: var(--font-sub);
+  font-size: 0.78rem;
+  letter-spacing: 0.02em;
+  color: var(--text-muted);
+  transition: color var(--dur-fast) var(--ease-theme);
+}
+
+@media (hover: hover) {
+  .cert-row:hover {
+    background: color-mix(in srgb, var(--primary) 7%, transparent);
+    translate: 3px 0;
+  }
+}
+
+.cert-row:hover .cert-type-icon,
+.cert-row:focus-visible .cert-type-icon,
+.cert-row:hover .cert-action,
+.cert-row:focus-visible .cert-action {
+  color: var(--accent-ink);
+}
+
+/* ── Toque por mundo ───────────────────────────────────────── */
+
+/* Cyber: el panel lleva el glow tenue característico del HUD */
+[data-theme="cyber"] .cert-panel {
+  box-shadow:
+    var(--shadow-card),
+    0 0 18px rgba(0, 229, 255, 0.07);
+}
+
+/* Gym: hover de fila en seco (sin desliz), como un golpe */
+[data-theme="gym"] .cert-row {
+  transition-duration: 60ms;
+}
+
+@media (hover: hover) {
+  [data-theme="gym"] .cert-row:hover {
+    translate: 0;
+    background: color-mix(in srgb, var(--primary) 12%, transparent);
+  }
+}

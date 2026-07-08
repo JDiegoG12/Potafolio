@@ -11,7 +11,7 @@ import {
 } from "react";
 import { play, unlock } from "@/lib/audio-engine";
 import { useTheme } from "@/lib/hooks/useTheme";
-import type { ThemeId } from "@/lib/themes";
+import { DEFAULT_THEME, type ThemeId } from "@/lib/themes";
 
 /** Clave de persistencia del mute en localStorage. */
 export const MUTE_STORAGE_KEY = "portfolio:mute";
@@ -60,7 +60,7 @@ function setStoredMute(next: boolean) {
 
 /** Tema activo leído del DOM: evita re-suscribir listeners al viajar. */
 function themeFromDom(): ThemeId {
-  return (document.documentElement.dataset.theme ?? "teyvat") as ThemeId;
+  return (document.documentElement.dataset.theme ?? DEFAULT_THEME) as ThemeId;
 }
 
 interface AudioContextValue {

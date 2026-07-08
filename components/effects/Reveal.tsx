@@ -10,6 +10,14 @@ import type { ThemeId } from "@/lib/themes";
  * slam, Cyber glitchea). La variant `visible` es una factory que recibe
  * el `delay` vía el prop `custom` de Framer Motion, para escalonar
  * cascadas sin perder los keyframes/eases propios de cada mundo.
+ *
+ * IMPORTANTE: cada `visible` resetea el set COMPLETO de propiedades
+ * animadas (x, y, scale, opacity) aunque su mundo no las use. El
+ * `hidden` inicial puede aplicarse con las variants de OTRO mundo (SSR
+ * renderiza el tema default y el guardado llega tras hidratar): si p.
+ * ej. quedó el y:28 de Teyvat y las variants pasan a Cyber (que no
+ * animaba y), ese desplazamiento se quedaba pegado para siempre —
+ * columnas desbordando su panel, medido en /certs.
  */
 const REVEAL_VARIANTS: Record<ThemeId, Variants> = {
   // Flota: fade + ascenso suave, easing etéreo.
@@ -17,7 +25,9 @@ const REVEAL_VARIANTS: Record<ThemeId, Variants> = {
     hidden: { opacity: 0, y: 28 },
     visible: (delay: number) => ({
       opacity: 1,
+      x: 0,
       y: 0,
+      scale: 1,
       transition: { duration: 0.8, ease: [0.22, 1, 0.36, 1], delay },
     }),
   },
@@ -26,6 +36,7 @@ const REVEAL_VARIANTS: Record<ThemeId, Variants> = {
     hidden: { opacity: 0, y: -22, scale: 1.045 },
     visible: (delay: number) => ({
       opacity: 1,
+      x: 0,
       y: 0,
       scale: 1,
       transition: { duration: 0.32, ease: [0.6, 0, 0.2, 1], delay },
@@ -37,6 +48,8 @@ const REVEAL_VARIANTS: Record<ThemeId, Variants> = {
     visible: (delay: number) => ({
       opacity: [0, 1, 0.35, 1],
       x: [-14, 5, -2, 0],
+      y: 0,
+      scale: 1,
       transition: { duration: 0.42, times: [0, 0.45, 0.6, 1], delay },
     }),
   },
@@ -47,6 +60,9 @@ const REDUCED_VARIANTS: Variants = {
   hidden: { opacity: 0 },
   visible: (delay: number) => ({
     opacity: 1,
+    x: 0,
+    y: 0,
+    scale: 1,
     transition: { duration: 0.25, delay },
   }),
 };

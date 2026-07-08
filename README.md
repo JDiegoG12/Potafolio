@@ -4,13 +4,13 @@ Portafolio personal de **Diego Gomez** (Desarrollador con IA): una SPA construid
 
 > *Building the future, one prompt at a time.*
 
-## ✨ Los 3 mundos
+## 3 Temas
 
-| Mundo | Esencia |
+| Tema | Esencia |
 |---|---|
-| 🌤️ **Teyvat** | Aventura y magia elemental: dorados, cielos suaves, partículas flotantes, serif épica |
-| 🏋️ **Gym** | Fuerza y disciplina: negro carbón, rojo energético, tipografía brutal, impactos secos |
-| 🖥️ **Cyber** | Alta tecnología: neón cyan/magenta, grid en perspectiva, glitch, HUD |
+|  **Teyvat** | Aventura y magia elemental: dorados, cielos suaves, partículas flotantes, serif épica |
+|  **Gym** | Fuerza y disciplina: negro carbón, rojo energético, tipografía brutal, impactos secos |
+|  **Cyber** | Alta tecnología: neón cyan/magenta, grid en perspectiva, glitch, HUD |
 
 - **Theme-switcher de portales**: 3 mini-escenas vivas en el navbar (tarjetas grandes en móvil) con preview al hover; al elegir mundo, un **radial reveal** se expande desde el portal pulsado trayendo la textura del mundo entrante (View Transitions API + WAAPI).
 - **Cada mundo re-skinea todo**: paleta, fuentes, radios, sombras, cursor custom, preloader, efectos de los títulos, botones, fondos animados, sonidos y reveal on scroll.
@@ -18,11 +18,11 @@ Portafolio personal de **Diego Gomez** (Desarrollador con IA): una SPA construid
 - **Sonido por mundo** sintetizado con Web Audio (opt-in, toggle de mute flotante).
 - Accesibilidad cuidada: `prefers-reduced-motion` respetado en todo, foco visible por teclado, skip-link, contraste AA.
 
-## 📸 Capturas
+##  Capturas
 
 <!-- TODO: añadir capturas/GIFs de los 3 mundos y de la transición -->
 
-## 🛠️ Stack
+##  Stack
 
 - [Next.js](https://nextjs.org/) (App Router) + **TypeScript**
 - [Tailwind CSS v4](https://tailwindcss.com/) — theming vía CSS variables + `data-theme`
@@ -32,7 +32,7 @@ Portafolio personal de **Diego Gomez** (Desarrollador con IA): una SPA construid
 - **Web Audio API** — sonidos por tema sintetizados (cero assets de audio)
 - [lucide-react](https://lucide.dev/) — iconografía
 
-## 🚀 Correr localmente
+##  Correr localmente
 
 Requiere Node.js 18.18+ (recomendado 20+).
 
@@ -48,7 +48,7 @@ npm run build
 npm start
 ```
 
-## 📁 Estructura
+##  Estructura
 
 ```
 /app                 # App Router: layout raíz (providers, fuentes) y página
@@ -65,7 +65,7 @@ npm start
 /public/images       # Fotos del autor (una por mundo) e imágenes de proyectos
 ```
 
-## 📄 Licencia
+##  Licencia
 
 El **código** de este proyecto se distribuye bajo la licencia [MIT](./LICENSE).
 

@@ -82,7 +82,9 @@ export function ProjectLinks({ project }: { project: Project }) {
     : restRepos;
 
   return (
-    <div className="flex flex-wrap items-center gap-x-5 gap-y-3">
+    // gap-x-4 (no 5): la variante cyber del botón es la más ancha y con
+    // el gap grande no cabía junto al repo-link en las cards estrechas.
+    <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
       {hasDemo && project.demoUrl && (
         <ThemedButton
           href={project.demoUrl}

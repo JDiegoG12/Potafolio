@@ -1,5 +1,6 @@
 import { Hero } from "@/components/sections/Hero";
 import { About } from "@/components/sections/About";
+import { Certifications } from "@/components/sections/Certifications";
 import { FeaturedProjects } from "@/components/sections/FeaturedProjects";
 import { ChillProjects } from "@/components/sections/ChillProjects";
 import { Contact } from "@/components/sections/Contact";
@@ -16,6 +17,7 @@ export default function Home() {
       <main id="main" className="mx-auto w-full max-w-6xl px-4 sm:px-6">
         <Hero />
         <About />
+        <Certifications />
         <FeaturedProjects />
         <ChillProjects />
         <Contact />

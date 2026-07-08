@@ -204,6 +204,91 @@ export const CHILL_PROJECTS: Project[] = [
   },
 ];
 
+/** Tipo de enlace de una certificación (§7.5): decide icono y etiqueta —
+ * `pdf` = documento local (Cisco), `verify` = página de verificación (NVIDIA). */
+export type CertLinkType = "pdf" | "verify";
+
+export interface Certification {
+  /** Título oficial de la certificación — no se traduce. */
+  title: string;
+  /** Fecha ISO "YYYY-MM"; se formatea legible según idioma con Intl. */
+  date: string;
+  url: string;
+  linkType: CertLinkType;
+}
+
+export interface CertIssuer {
+  id: "cisco" | "nvidia";
+  /** Nombre de marca — no se traduce. */
+  name: string;
+  certifications: Certification[];
+}
+
+/** Certificaciones agrupadas por emisor (§7.5), en orden de aparición. */
+export const CERTIFICATIONS: CertIssuer[] = [
+  {
+    id: "cisco",
+    name: "Cisco",
+    certifications: [
+      {
+        title: "Fundamentos de Ciberseguridad",
+        date: "2025-12",
+        url: "/certificates/cisco-fundamentos-ciberseguridad.pdf",
+        linkType: "pdf",
+      },
+      {
+        title: "CCNA: Introducción a las redes",
+        date: "2026-04",
+        url: "/certificates/ccna-introduccion-redes.pdf",
+        linkType: "pdf",
+      },
+      {
+        title:
+          "CCNA: Fundamentos de Conmutación, Enrutamiento y Redes Inalámbricas",
+        date: "2026-06",
+        url: "/certificates/ccna-conmutacion-enrutamiento.pdf",
+        linkType: "pdf",
+      },
+    ],
+  },
+  {
+    id: "nvidia",
+    name: "NVIDIA",
+    certifications: [
+      {
+        title: "Rapid Application Development with Large Language Models (LLMs)",
+        date: "2026-05",
+        url: "https://learn.nvidia.com/certificates?id=aqOg3VB0QtSQHTYilWLbBA",
+        linkType: "verify",
+      },
+      {
+        title: "Building LLM Applications With Prompt Engineering",
+        date: "2026-04",
+        url: "https://learn.nvidia.com/certificates?id=uIIKkxnHRoStwgu8BAXY1g",
+        linkType: "verify",
+      },
+      {
+        title: "Introduction to Transformer-Based Natural Language Processing",
+        date: "2026-04",
+        url: "https://learn.nvidia.com/certificates?id=OrO_d61-RW68c4Wnrd5-OQ",
+        linkType: "verify",
+      },
+      {
+        title: "Accelerating End-to-End Data Science Workflows",
+        date: "2026-03",
+        url: "https://learn.nvidia.com/certificates?id=GGN0xpgOQTu3fpXsgCMuIw",
+        linkType: "verify",
+      },
+      {
+        title: "Getting Started with Deep Learning",
+        date: "2026-03",
+        url: "https://learn.nvidia.com/certificates?id=sat_0olDRS2h0UNhxHayaQ",
+        linkType: "verify",
+      },
+    ],
+  },
+];
+
 /** Autor y contacto (§7.1). Bio corta/larga viven en locales como placeholder. */
 export const AUTHOR = {
   name: "DIEGO GOMEZ",

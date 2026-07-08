@@ -5,6 +5,7 @@
 @import "./buttons.css";
 @import "./hero-cta.css";
 @import "./projects.css";
+@import "./certs.css";
 @import "./backgrounds.css";
 
 /* Expone los tokens por tema como utilidades de Tailwind v4:

@@ -11,8 +11,8 @@ export const THEME_IDS = ["teyvat", "gym", "cyber"] as const;
 /** Id de un mundo: `"teyvat" | "gym" | "cyber"`. */
 export type ThemeId = (typeof THEME_IDS)[number];
 
-/** Tema de la primera visita (CLAUDE.md §2). */
-export const DEFAULT_THEME: ThemeId = "teyvat";
+/** Tema de la primera visita. */
+export const DEFAULT_THEME: ThemeId = "gym";
 
 /** Clave de localStorage donde se persiste el tema activo. */
 export const THEME_STORAGE_KEY = "portfolio:theme";

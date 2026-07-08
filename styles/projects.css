@@ -77,11 +77,26 @@
   font-size: 0.92rem;
 }
 
-/* Link secundario a repos: sobrio, con icono */
+/* Cyber es la variante más ANCHA (brackets [ ] + mono/wide): sin este
+   ajuste, su botón desbordaba la fila de acciones de las cards
+   estrechas (medido: 195px vs 127-149px de los otros mundos) y
+   empujaba al link de repo a otra línea. Se compacta solo en cyber
+   para que los CTA quepan alineados en la misma fila. */
+[data-theme="cyber"] .btn-sm {
+  padding-inline: 0.9rem;
+  gap: 0.4rem;
+  letter-spacing: 0.02em;
+}
+
+/* Link secundario a repos: sobrio, con icono. min-height a la altura
+   del .btn-sm: mantiene el centrado vertical junto al botón y, si la
+   fila de acciones hace wrap, la fila del link conserva el mismo ritmo
+   vertical (nada de texto "suelto" desalineado). */
 .repo-link {
   display: inline-flex;
   align-items: center;
   gap: 0.45rem;
+  min-height: 2.4rem;
   font-family: var(--font-sub);
   font-size: 0.92rem;
   color: var(--text-muted);

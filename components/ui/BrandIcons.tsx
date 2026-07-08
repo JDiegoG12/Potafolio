@@ -1,13 +1,48 @@
 import type { ComponentPropsWithoutRef } from "react";
+import { siCisco, siNvidia } from "simple-icons";
 
 /**
- * Iconos de marca (GitHub, LinkedIn) como SVG inline: lucide-react 1.x
- * retiró los iconos de marcas, así que se incluyen aquí con los paths
- * oficiales. Heredan `currentColor` y aceptan las props de un `<svg>`
- * (className, aria-hidden…), igual que un icono de lucide.
+ * Iconos de marca como SVG inline: lucide-react 1.x retiró los iconos
+ * de marcas. GitHub/LinkedIn llevan sus paths oficiales embebidos;
+ * Cisco/NVIDIA (§7.5, uso identificativo de emisores de certificación)
+ * vienen de simple-icons sin deformar — solo se tintan vía
+ * `currentColor` para re-skinearse con el tema. Todos aceptan las
+ * props de un `<svg>` (className, aria-hidden…), igual que lucide.
  */
 
 type IconProps = ComponentPropsWithoutRef<"svg"> & { size?: number };
+
+/** Marca de Cisco (simple-icons). */
+export function CiscoIcon({ size = 18, ...props }: IconProps) {
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 24 24"
+      fill="currentColor"
+      aria-hidden
+      {...props}
+    >
+      <path d={siCisco.path} />
+    </svg>
+  );
+}
+
+/** Marca de NVIDIA (simple-icons). */
+export function NvidiaIcon({ size = 18, ...props }: IconProps) {
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 24 24"
+      fill="currentColor"
+      aria-hidden
+      {...props}
+    >
+      <path d={siNvidia.path} />
+    </svg>
+  );
+}
 
 /** Marca de GitHub (octocat). */
 export function GitHubIcon({ size = 18, ...props }: IconProps) {
